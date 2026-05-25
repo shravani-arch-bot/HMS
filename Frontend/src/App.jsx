@@ -176,19 +176,19 @@ function Operations({ request }) {
 }
 
 function DataTable({ data }) {
-  if (!data || data.length === 0) return <p className="empty">No data to show.</p>;
+  if (!data || data.length === 0) {
+    return <p className="empty">No data to show.</p>;
+  }
 
   let rows = data;
 
-  if (data.length === 1 && data[0].wards) {
+  if (data.length === 1 && data[0]?.wards) {
     rows = data[0].wards;
   }
 
-  if (data.length === 1 && data[0].patients) {
-    rows = data[0].patients;
-  }
-
-  const validRows = rows.filter(item => item && typeof item === "object");
+  const validRows = rows.filter(
+    item => item !== null && typeof item === "object" && !Array.isArray(item)
+  );
 
   if (validRows.length === 0) {
     return <pre>{JSON.stringify(data, null, 2)}</pre>;
@@ -200,18 +200,23 @@ function DataTable({ data }) {
     <div className="table-wrap">
       <table>
         <thead>
-          <tr>{keys.map(k => <th key={k}>{k}</th>)}</tr>
+          <tr>
+            {keys.map(key => (
+              <th key={key}>{key}</th>
+            ))}
+          </tr>
         </thead>
+
         <tbody>
-          {validRows.map((row, i) => (
-            <tr key={i}>
-              {keys.map(k => (
-                <td key={k}>
-                  {row[k] === null
+          {validRows.map((item, index) => (
+            <tr key={index}>
+              {keys.map(key => (
+                <td key={key}>
+                  {item[key] === null || item[key] === undefined
                     ? "-"
-                    : typeof row[k] === "object"
-                    ? JSON.stringify(row[k])
-                    : String(row[k])}
+                    : typeof item[key] === "object"
+                    ? JSON.stringify(item[key])
+                    : String(item[key])}
                 </td>
               ))}
             </tr>
