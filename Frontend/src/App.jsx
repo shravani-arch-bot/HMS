@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { HeartPulse, Users, Bed, UserRound, CalendarCheck, RefreshCw, LogOut } from "lucide-react";
 import "./App.css";
 
-const API = "https://hms-z0kr.onrender.com";
+const API = "https://hms-2-ah8q.onrender.com";
 
 export default function App() {
   const [tab, setTab] = useState("patients");
