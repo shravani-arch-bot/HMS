@@ -34,7 +34,7 @@ export default function App() {
     <div className="app">
       <header className="hero">
         <h1><HeartPulse /> CityCare Super Specialty Hospital</h1>
-        <p>React + Spring Boot + MySQL Hospital Dashboard</p>
+        
       </header>
 
       <div className="tabs">
