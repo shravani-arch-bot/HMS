@@ -187,7 +187,13 @@ function DataTable({ data }) {
     <div className="table-wrap">
       <table>
         <thead>
-          <tr>{keys.map(k => <th key={k}>{k}</th>)}</tr>
+          <tr>{keys.map(k => (
+  <td key={k}>
+    {typeof row[k] === "object"
+      ? JSON.stringify(row[k], null, 2)
+      : row[k] ?? "-"}
+  </td>
+))}</tr>
         </thead>
         <tbody>
           {rows.map((row, i) => (
