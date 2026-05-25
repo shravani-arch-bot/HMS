@@ -18,9 +18,11 @@ export default function App() {
       let data;
       try {
         data = JSON.parse(text);
-      } catch {
-        data = text;
-      }
+      } catch (error) {
+  setOutputTitle("Error");
+  setMessage("Backend connection failed: " + error.message);
+  setOutput([]);
+}
 
       setOutputTitle(title);
       setOutput(Array.isArray(data) ? data : [data]);
