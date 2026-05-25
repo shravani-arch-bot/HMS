@@ -178,27 +178,42 @@ function Operations({ request }) {
 function DataTable({ data }) {
   if (!data || data.length === 0) return <p className="empty">No data to show.</p>;
 
-  const rows = data.filter(item => typeof item === "object");
-  if (rows.length === 0) return <pre>{String(data[0])}</pre>;
+  let rows = data;
 
-  const keys = [...new Set(rows.flatMap(obj => Object.keys(obj)))];
+  if (data.length === 1 && data[0].wards) {
+    rows = data[0].wards;
+  }
+
+  if (data.length === 1 && data[0].patients) {
+    rows = data[0].patients;
+  }
+
+  const validRows = rows.filter(item => item && typeof item === "object");
+
+  if (validRows.length === 0) {
+    return <pre>{JSON.stringify(data, null, 2)}</pre>;
+  }
+
+  const keys = [...new Set(validRows.flatMap(obj => Object.keys(obj)))];
 
   return (
     <div className="table-wrap">
       <table>
         <thead>
-          <tr>{keys.map(k => (
-  <td key={k}>
-    {typeof row[k] === "object"
-      ? JSON.stringify(row[k], null, 2)
-      : row[k] ?? "-"}
-  </td>
-))}</tr>
+          <tr>{keys.map(k => <th key={k}>{k}</th>)}</tr>
         </thead>
         <tbody>
-          {rows.map((row, i) => (
+          {validRows.map((row, i) => (
             <tr key={i}>
-              {keys.map(k => <td key={k}>{row[k] === null ? "-" : String(row[k] ?? "-")}</td>)}
+              {keys.map(k => (
+                <td key={k}>
+                  {row[k] === null
+                    ? "-"
+                    : typeof row[k] === "object"
+                    ? JSON.stringify(row[k])
+                    : String(row[k])}
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>
